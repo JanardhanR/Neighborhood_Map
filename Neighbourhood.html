@@ -5,49 +5,70 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <title>My Neighbourhood</title>
 </head>
 
 <body>
-    <div class="wrapper">
-        <!-- Sidebar Holder -->
+
+    <!-- 
+        <div class="wrapper">
         <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Bootstrap Sidebar</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+
+            </ul>
+
         </nav>
 
-        <!-- Page Content Holder -->
-
+        
         <div id="content">
-
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
+
                     <div class="navbar-header">
                         <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
                             <i class="glyphicon glyphicon-align-left"></i>
-                            <span>Locations</span>
+                            <span>Toggle Sidebar</span>
                         </button>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                        </ul>
                     </div>
                 </div>
             </nav>
-            <div id="map">
-            </div>
+           
         </div>
-    </div>
+    </div> -->
+
+    <div id="map"></div>
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
             $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
         });
     </script>
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=drawing,key=AIzaSyD62utTUhJBcOXsudmrD41EH3O_geuEGyg&callback=initMap"
-        async defer></script>
     <script src="js/lib/knockout-3.4.2.js"></script>
-    <script src="js/app.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=drawing,key=AIzaSyD62utTUhJBcOXsudmrD41EH3O_geuEGyg&callback=initMap"
+    async defer></script>
+     <script src="js/app.js"></script>
+
 </body>
 
 </html>
