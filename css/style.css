@@ -1,7 +1,18 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
+/*commented for reuse*/
+ /* * {
+   outline: 1px solid red !important;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+} */
+
 #map {
-    height: 100%;
+    height: 500px;
 }
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
@@ -9,7 +20,11 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #fafafa;
+    /* background: #fafafa;     */
+    background: black;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 p {
@@ -27,11 +42,11 @@ a, a:hover, a:focus {
 }
 
 .navbar {
-    padding: 15px 10px;
-    background: #fff;
-    border: none;
-    border-radius: 0;
-    margin-bottom: 40px;
+    padding: 7px 10px;
+    /* background: #fff; */
+    background: black;
+    border-radius: 15;
+    margin-bottom: 10px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -48,9 +63,6 @@ a, a:hover, a:focus {
     margin: 40px 0;
 }
 
-/* ---------------------------------------------------
-    SIDEBAR STYLE
------------------------------------------------------ */
 #sidebar {
     width: 250px;
     position: fixed;
@@ -58,8 +70,10 @@ a, a:hover, a:focus {
     left: 0;
     height: 100vh;
     z-index: 999;
-    background: #7386D5;
-    color: #fff;
+    /* background: #7386D5; */
+    background: black;
+    color: rgb(190, 101, 68);
+    /* color: #fff; */
     transition: all 0.3s;
 }
 
@@ -68,12 +82,13 @@ a, a:hover, a:focus {
 }
 
 #sidebar .sidebar-header {
-    padding: 20px;
-    background: #6d7fcc;
+    padding: 10px;
+    /* background: #6d7fcc; */
+    background:black;
 }
 
 #sidebar ul.components {
-    padding: 20px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #47748b;
 }
 
@@ -114,11 +129,11 @@ a[aria-expanded="true"]::before {
     content: '\e260';
 }
 
-
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    /* background: #6d7fcc; */
+    background: black;
 }
 
 ul.CTAs {
@@ -140,14 +155,9 @@ a.article, a.article:hover {
     background: #6d7fcc !important;
     color: #fff !important;
 }
-
-
-/* ---------------------------------------------------
-    CONTENT STYLE
------------------------------------------------------ */
 #content {
     width: calc(100% - 250px);
-    padding: 40px;
+    padding: 10px;
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;
@@ -157,10 +167,6 @@ a.article, a.article:hover {
 #content.active {
     width: 100%;
 }
-
-/* ---------------------------------------------------
-    MEDIAQUERIES
------------------------------------------------------ */
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;
@@ -178,3 +184,14 @@ a.article, a.article:hover {
         display: none;
     }
 }
+
+#search-within-text {
+    color:blue;
+}
+.searchFilter{
+    color:blue;
+}
+
+.LocList {
+    padding-top: 30px;
+  }
