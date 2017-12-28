@@ -118,11 +118,10 @@ function showMarker(location) {
         console.log("printing showmarker titles");
         console.log(location.toLowerCase());
         console.log(markers[i].title.toLowerCase());
-        if ((markers[i].title.toLowerCase().indexOf(location.toLowerCase()) !== -1)) {
-            //if ((markers[i].position.lat() == location.lat) && (markers[i].position.lng() == location.lng)) {            
+        if ((markers[i].title.toLowerCase().indexOf(location.toLowerCase()) !== -1)) {            
             markers[i].setMap(map);
-            bounds.extend(markers[i].position);
-        }
+        }        
+        bounds.extend(markers[i].position);
     }
     map.fitBounds(bounds);
 }
@@ -245,9 +244,14 @@ var ViewModel = function () {
     this.onClick = function ($index, data, event) {
         var indexTouse = $index();
         var metLoc = (ko.observable(self.filterLocations()[indexTouse]));
-        console.log(metLoc.title);
+        
         //need to pass the marker, passign MetroLocation object wrongly
-        //populateInfoWindow(metLoc, largeInfowindow);
+        for (var i = 0; i < markers.length; i++) {            
+            if ((markers[i].title.toLowerCase().indexOf(metLoc.title().toLowerCase()) !== -1)) {            
+                populateInfoWindow(markers[i], largeInfowindow);
+            }        
+        }
+        
     };
 };
 
