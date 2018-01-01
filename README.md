@@ -13,6 +13,8 @@ Udacity FSND.
    2. Some of the functions used were done as part of excercises in earlier courses and have been reused in the project.
    
    4. Minimum styling has been done as it is not the focus of this project. 
+   
+   5. Has been tested for mobile/desktop.
 
 ## How to open/run the project
    1. Download the source from Github link [here](https://github.com/JanardhanR/Neighborhood_Map)   
