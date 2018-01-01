@@ -99,7 +99,11 @@ var customstyles = [
     }
 ];
 
-// This function will loop through the markers array and display them all.
+/**
+* @description This function will loop through the markers array and display them all.
+* @param {None}
+* @returns {None} 
+*/
 function showListings() {
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
@@ -109,7 +113,12 @@ function showListings() {
     }
     map.fitBounds(bounds);
 }
-// This function will loop through the markers array and display the specific marker that matches the filter.
+
+/**
+* @description This function will loop through the markers array and display the specific marker that matches the filter
+* @param {Location} location
+* @returns {None} 
+*/
 function showMarker(location) {
     for (var i = 0; i < markers.length; i++) {
         if ((markers[i].title.toLowerCase().indexOf(location.toLowerCase()) !== -1)) {
@@ -119,16 +128,24 @@ function showMarker(location) {
     }
 }
 
-//hide all the markers..
+/**
+* @description hides all the markers.
+* @param {None}
+* @returns {None} 
+*/
 function hideMarkers() {
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
 }
 
-// This function takes in a COLOR, and then creates a new marker
-// icon of that color. The icon will be 21 px wide by 34 high, have an origin
-// of 0, 0 and be anchored at 10, 34).
+/**
+* @description This function takes in a COLOR, and then creates a new marker
+* icon of that color. The icon will be 21 px wide by 34 high, have an origin
+* of 0, 0 and be anchored at 10, 34).
+* @param {number} markerColor
+* @returns {MarkerImage} markerImage
+*/
 function makeMarkerIcon(markerColor) {
     var markerImage = new google.maps.MarkerImage(
         'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor +
@@ -140,7 +157,12 @@ function makeMarkerIcon(markerColor) {
     return markerImage;
 }
 
-//location model, only title is required to be visible..
+
+/**
+* @description Represents a location model, only title is required to be visible.
+* @constructor
+* @param {object} data - location object
+*/
 var LocalLoc = function (data) {
     var self = this;
     this.title = ko.observable(data.title);
@@ -148,14 +170,18 @@ var LocalLoc = function (data) {
     this.venueid = ko.observable(data.venueid);
 };
 
-// This function populates the infowindow when the marker is clicked. We'll only allow
-// one infowindow which will open at the marker that is clicked, and populate based
-// on that markers position.
+
+/**
+* @description This function populates the infowindow when the marker is clicked. We'll only allow
+* one infowindow which will open on the marker that is clicked, and populate based
+* on its position.
+* @param {google.maps.Marker} marker
+* @returns {google.maps.InfoWindow} infowindow
+*/
 function populateInfoWindow(marker, infowindow) {
     //setup the Foursquare API call 
-    var CLIENT_ID = 'N4WJ13M41G4NGILETXMBRMIGGHNGBLNEVCC0G11VF0G4J2AZ';
-    var CLIENT_SECRET = 'PWUOUGXS1QUYMH51QA4YNGSRARGP1OXJSRAX0BYJGWI2BMX0';
-    var VENUE_ID = '4ea00dca0aaf09533178e13f';
+    const CLIENT_ID = 'N4WJ13M41G4NGILETXMBRMIGGHNGBLNEVCC0G11VF0G4J2AZ';
+    const CLIENT_SECRET = 'PWUOUGXS1QUYMH51QA4YNGSRARGP1OXJSRAX0BYJGWI2BMX0';
     var API_ENDPOINT = 'https://api.foursquare.com/v2/venues/VENUE_ID/photos' +
         '?client_id=CLIENT_ID' +
         '&client_secret=CLIENT_SECRET' +
@@ -205,8 +231,12 @@ function populateInfoWindow(marker, infowindow) {
         1500);
 }
 
-//This function creates and shows the map..
-//all other functionality are handled in ViewModel..
+/**
+* @description This function creates and shows the map..
+* all other functionality are handled in ViewModel..
+* @param {None}
+* @returns {None}
+*/
 function initMap() {
     var self = this;
     console.log("reached here 1");
@@ -256,7 +286,11 @@ function initMap() {
     showListings();
 }
 
-//KO viewmodel that handles the common
+/**
+* @description Knockout viewmodel
+* @param {None}
+* @returns {None}
+*/
 var ViewModel = function () {
     var self = this;
     this.filterLocations = ko.observableArray([]);
@@ -297,7 +331,11 @@ var ViewModel = function () {
     };
 }
 
-//main function
+/**
+* @description main function
+* @param {None}
+* @returns {None}
+*/
 function loadMap() {
     initMap();
     ko.applyBindings(new ViewModel());
