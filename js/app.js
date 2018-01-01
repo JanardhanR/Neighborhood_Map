@@ -9,12 +9,12 @@ var markers = [];
 var nammaLocations = [
     { title: 'By 2 coffee', location: { lat: 12.964765741776635, lng: 77.53886512623342 }, venueid: '51d8034a498e44075a4a92fc' },
     { title: 'My Tea House', location: { lat: 12.934294700622559, lng: 77.61653137207031 }, venueid: '54a7d9ce498ec5a0b5e31642' },
-    { title: 'Fluid Studio Café', location: { lat: 12.920480387168718, lng: 77.56933987140656 }, venueid: '521cac0011d2aa586355eb51' },
+    { title: 'Fluid Studio Cafe', location: { lat: 12.920480387168718, lng: 77.56933987140656 }, venueid: '521cac0011d2aa586355eb51' },
     { title: 'Courtyard Cafe', location: { lat: 12.958457196981318, lng: 77.59314702896103 }, venueid: '5380a110498eaf0c790162f0' },
     { title: 'Cafe Pascucci', location: { lat: 12.906439457874848, lng: 77.5918362242764 }, venueid: '4e8ed2b85503e288b43ee921' },
     { title: 'Cafe Mondo', location: { lat: 12.939682363892148, lng: 77.57759581928839 }, venueid: '4dfa039814959516a96389c3' },
     { title: 'Costa Coffee', location: { lat: 12.932490004726679, lng: 77.63161819196716 }, venueid: '4bf3fa52370e76b0a979bd4a' },
-    { title: 'Sweet Chariot', location: { lat: 12.968301018371433, lng: 77.60079570618583 }, venueid: '4d29af728292236a473025bb' }    
+    { title: 'Sweet Chariot', location: { lat: 12.968301018371433, lng: 77.60079570618583 }, venueid: '4d29af728292236a473025bb' }
 ];
 
 //we'll define custom styles.
@@ -111,21 +111,19 @@ function showListings() {
 }
 // This function will loop through the markers array and display the specific marker that matches the filter.
 function showMarker(location) {
-    var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < markers.length; i++) {
         if ((markers[i].title.toLowerCase().indexOf(location.toLowerCase()) !== -1)) {
             markers[i].setMap(map);
-            bounds.extend(markers[i].position);
             break;
         }
-    }      
-    map.fitBounds(bounds); 
+    }
 }
 
+//hide all the markers..
 function hideMarkers() {
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
-    }    
+    }
 }
 
 // This function takes in a COLOR, and then creates a new marker
@@ -142,7 +140,8 @@ function makeMarkerIcon(markerColor) {
     return markerImage;
 }
 
-var MetroLocation = function (data) {
+//location model, only title is required to be visible..
+var LocalLoc = function (data) {
     var self = this;
     this.title = ko.observable(data.title);
     this.location = ko.observable(data.location);
@@ -153,7 +152,7 @@ var MetroLocation = function (data) {
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position.
 function populateInfoWindow(marker, infowindow) {
-    
+    //setup the Foursquare API call 
     var CLIENT_ID = 'N4WJ13M41G4NGILETXMBRMIGGHNGBLNEVCC0G11VF0G4J2AZ';
     var CLIENT_SECRET = 'PWUOUGXS1QUYMH51QA4YNGSRARGP1OXJSRAX0BYJGWI2BMX0';
     var VENUE_ID = '4ea00dca0aaf09533178e13f';
@@ -171,17 +170,18 @@ function populateInfoWindow(marker, infowindow) {
             infowindow.marker = null;
         });
     }
-    
+
     //re-center the map to where marker is selected..
     map.setCenter(marker.getPosition());
     //show loading till we get a response from foursqare..
-    infowindow.setContent('<div>' + "Loading.." + '</div>');
+    infowindow.setContent('<div>' + "Loading photo from foursquare.." + '</div>');
     //now try get the photo for the location..
     $.getJSON(API_ENDPOINT
         .replace('VENUE_ID', marker.venueid)
         .replace('CLIENT_ID', CLIENT_ID)
         .replace('CLIENT_SECRET', CLIENT_SECRET)
         , function (result, status) {
+            //handle errors.  Instead of showing actual error, tell user that photo is not available.. 
             if (status !== 'success') {
                 infowindow.setContent('<div>' + 'Location photo not available' + '</div>');
                 return;
@@ -189,11 +189,11 @@ function populateInfoWindow(marker, infowindow) {
 
             var url_Photo = result.response.photos.items[0].prefix + '200x200' +
                 result.response.photos.items[0].suffix;
-            infowindow.setContent('<div>' + '<img src=' + url_Photo + '></img>' + '</div>');
+            infowindow.setContent('<div>'
+                + '<div>' + 'photo from foursquare.com' + '</div>'
+                + '<img src=' + url_Photo + '></img>' + '</div>');
 
         });
-
-
     infowindow.open(map, marker);
 
     //set animiation on the marker to bounce
@@ -205,6 +205,8 @@ function populateInfoWindow(marker, infowindow) {
         1500);
 }
 
+//This function creates and shows the map..
+//all other functionality are handled in ViewModel..
 function initMap() {
     var self = this;
     console.log("reached here 1");
@@ -254,32 +256,36 @@ function initMap() {
     showListings();
 }
 
+//KO viewmodel that handles the common
 var ViewModel = function () {
     var self = this;
     this.filterLocations = ko.observableArray([]);
     nammaLocations.forEach(function (locItem) {
-        self.filterLocations.push(new MetroLocation(locItem));
+        self.filterLocations.push(new LocalLoc(locItem));
     });
 
     this.filterText = ko.observable();
 
+    //filter function that shows the markers based on the filter
     this.doFilter = function () {
         self.filterLocations.removeAll();
         hideMarkers();
         nammaLocations.forEach(function (locItem) {
             if (locItem.title.toLowerCase().indexOf(self.filterText().toLowerCase()) != -1) {
-                self.filterLocations.push(new MetroLocation(locItem));
+                self.filterLocations.push(new LocalLoc(locItem));
                 showMarker(locItem.title);
             }
         });
-        // map.setCenter(new google.maps.LatLng(12.958457196981318,77.59314702896103));
-        // map.setZoom(13);
+        //close the current infowindow and remove the marker reference..
+        largeInfowindow.close();
+        largeInfowindow.marker = null;
     };
     this.filterText.subscribe(function () {
         self.doFilter();
     });
     self.googlemap = map;
 
+    //show the info window with the location photo from foursquare
     this.onClick = function ($index, filterText, data, event) {
         var indexTouse = $index();
         for (var i = 0; i < markers.length; i++) {
@@ -291,7 +297,7 @@ var ViewModel = function () {
     };
 }
 
-
+//main function
 function loadMap() {
     initMap();
     ko.applyBindings(new ViewModel());

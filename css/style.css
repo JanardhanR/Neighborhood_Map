@@ -1,24 +1,9 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
-/*commented for reuse*/
- /* * {
-   outline: 1px solid red !important;
-}
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
-} */
-
 #map {
     min-height: 573px;
     height:auto;
-     /* 573px; */
 }
-
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -71,7 +56,6 @@ a, a:hover, a:focus {
     height: 100vh;
     z-index: 999;
     background: #7386D5;
-    /* color: rgb(190, 101, 68); */
     color: #fff;
     transition: all 0.3s;
 }
