@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <title>My Neighbourhood</title>
+    <title>My Neighborhood</title>
 </head>
 <body>
     <div class="wrapper ">
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>Namma Metro Locations</h3>
+                <h3>Café</h3>
                 <ul class="list-unstyled components ">
                     <li>
                         <div class="searchFilter">
@@ -22,7 +22,7 @@
                     <li class="LocList">
                         <ul class="list-unstyled" data-bind="foreach: filterLocations">
                             <li>
-                                <a data-bind="text: $data.title, click: function(data, event) { $parent.onClick($index, data, event);}">
+                                <a data-bind="text: $data.title, click: function(data, event) { $parent.onClick($index,$data.title, data, event);}">
                                 </a>
                             </li>
                         </ul>
@@ -57,6 +57,7 @@
             });
         </script>
         <script src="js/lib/knockout-3.4.2.js"></script>
+        <script src="js/lib/underscore-min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyD62utTUhJBcOXsudmrD41EH3O_geuEGyg&v=3&callback=loadMap"
             async defer></script>
         <script src="js/app.js"></script>

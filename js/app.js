@@ -1,25 +1,23 @@
+//globals
 var map;
 var largeInfowindow;
-
+var defaultIcon;
+var highlightedIcon;
 var markers = [];
 
+//Neigborhood locations
 var nammaLocations = [
-    // { title: 'Nagasandra', location: { lat: 13.0432, lng: 77.5003 } },
-    { title: 'Baiyappanahalli', location: { lat: 12.9913, lng: 77.6521 } },
-    { title: 'Swami Vivekananda Road', location: { lat: 12.9859, lng: 77.6449 } },
-    { title: 'Indiranagar', location: { lat: 12.9719, lng: 77.6412 } },
-    { title: 'Halasuru', location: { lat: 12.9817, lng: 77.6286 } },
-    { title: 'Trinity Circle', location: { lat: 12.9728, lng: 77.6217 } },
-    { title: 'Cubbon Park', location: { lat: 12.9763, lng: 77.5929 } },
-    { title: 'Vidhana Souda', location: { lat: 12.9795, lng: 77.5909 } },
-    { title: 'Sir M.Visveshwaraiah', location: { lat: 12.974615, lng: 77.584785 } },
-    { title: 'Majestic', location: { lat: 12.975692, lng: 77.572837 } },
-    //
-    { title: 'Dummy 1', location: { lat: 12.9728, lng: 77.6317 } },
-    { title: 'Dummy 2', location: { lat: 12.9763, lng: 77.5949 } },
-    { title: 'Dummy 3', location: { lat: 12.9795, lng: 77.5809 } }
+    { title: 'By 2 coffee', location: { lat: 12.964765741776635, lng: 77.53886512623342 }, venueid: '51d8034a498e44075a4a92fc' },
+    { title: 'My Tea House', location: { lat: 12.934294700622559, lng: 77.61653137207031 }, venueid: '54a7d9ce498ec5a0b5e31642' },
+    { title: 'Fluid Studio Café', location: { lat: 12.920480387168718, lng: 77.56933987140656 }, venueid: '521cac0011d2aa586355eb51' },
+    { title: 'Courtyard Cafe', location: { lat: 12.958457196981318, lng: 77.59314702896103 }, venueid: '5380a110498eaf0c790162f0' },
+    { title: 'Cafe Pascucci', location: { lat: 12.906439457874848, lng: 77.5918362242764 }, venueid: '4e8ed2b85503e288b43ee921' },
+    { title: 'Cafe Mondo', location: { lat: 12.939682363892148, lng: 77.57759581928839 }, venueid: '4dfa039814959516a96389c3' },
+    { title: 'Costa Coffee', location: { lat: 12.932490004726679, lng: 77.63161819196716 }, venueid: '4bf3fa52370e76b0a979bd4a' },
+    { title: 'Sweet Chariot', location: { lat: 12.968301018371433, lng: 77.60079570618583 }, venueid: '4d29af728292236a473025bb' }    
 ];
 
+//we'll define custom styles.
 var customstyles = [
     { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
     { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
@@ -111,25 +109,23 @@ function showListings() {
     }
     map.fitBounds(bounds);
 }
-
+// This function will loop through the markers array and display the specific marker that matches the filter.
 function showMarker(location) {
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < markers.length; i++) {
-        console.log("printing showmarker titles");
-        console.log(location.toLowerCase());
-        console.log(markers[i].title.toLowerCase());
-        if ((markers[i].title.toLowerCase().indexOf(location.toLowerCase()) !== -1)) {            
+        if ((markers[i].title.toLowerCase().indexOf(location.toLowerCase()) !== -1)) {
             markers[i].setMap(map);
-        }        
-        bounds.extend(markers[i].position);
-    }
-    map.fitBounds(bounds);
+            bounds.extend(markers[i].position);
+            break;
+        }
+    }      
+    map.fitBounds(bounds); 
 }
 
 function hideMarkers() {
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
-    }
+    }    
 }
 
 // This function takes in a COLOR, and then creates a new marker
@@ -143,7 +139,6 @@ function makeMarkerIcon(markerColor) {
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34),
         new google.maps.Size(21, 34));
-    console.log("marker : " + markerImage);
     return markerImage;
 }
 
@@ -151,38 +146,79 @@ var MetroLocation = function (data) {
     var self = this;
     this.title = ko.observable(data.title);
     this.location = ko.observable(data.location);
+    this.venueid = ko.observable(data.venueid);
 };
 
 // This function populates the infowindow when the marker is clicked. We'll only allow
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position.
 function populateInfoWindow(marker, infowindow) {
+    
+    var CLIENT_ID = 'N4WJ13M41G4NGILETXMBRMIGGHNGBLNEVCC0G11VF0G4J2AZ';
+    var CLIENT_SECRET = 'PWUOUGXS1QUYMH51QA4YNGSRARGP1OXJSRAX0BYJGWI2BMX0';
+    var VENUE_ID = '4ea00dca0aaf09533178e13f';
+    var API_ENDPOINT = 'https://api.foursquare.com/v2/venues/VENUE_ID/photos' +
+        '?client_id=CLIENT_ID' +
+        '&client_secret=CLIENT_SECRET' +
+        '&v=20171231' +
+        '&callback=?';
+
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
-        infowindow.setContent('<div>' + marker.title + '</div>');
-        infowindow.open(map, marker);
         // Make sure the marker property is cleared if the infowindow is closed.
         infowindow.addListener('closeclick', function () {
             infowindow.marker = null;
         });
     }
+    
+    //re-center the map to where marker is selected..
+    map.setCenter(marker.getPosition());
+    //show loading till we get a response from foursqare..
+    infowindow.setContent('<div>' + "Loading.." + '</div>');
+    //now try get the photo for the location..
+    $.getJSON(API_ENDPOINT
+        .replace('VENUE_ID', marker.venueid)
+        .replace('CLIENT_ID', CLIENT_ID)
+        .replace('CLIENT_SECRET', CLIENT_SECRET)
+        , function (result, status) {
+            if (status !== 'success') {
+                infowindow.setContent('<div>' + 'Location photo not available' + '</div>');
+                return;
+            }
+
+            var url_Photo = result.response.photos.items[0].prefix + '200x200' +
+                result.response.photos.items[0].suffix;
+            infowindow.setContent('<div>' + '<img src=' + url_Photo + '></img>' + '</div>');
+
+        });
+
+
+    infowindow.open(map, marker);
+
+    //set animiation on the marker to bounce
+    //we'll show animation irrespective of infowindow is open or closed..
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    _.delay(function () {
+        marker.setAnimation(google.maps.Animation.DROP);
+    },
+        1500);
 }
 
 function initMap() {
     var self = this;
     console.log("reached here 1");
     map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 13.072651, lng: 77.796172 },
+        center: { lat: 12.958457196981318, lng: 77.59314702896103 },
         zoom: 13,
         styles: customstyles
     });
     // Style the markers a bit. This will be our listing marker icon.
-    var defaultIcon = makeMarkerIcon('6a28e6');
+    defaultIcon = makeMarkerIcon('6a28e6');
 
     // Create a "highlighted location" marker color for when the user
     // mouses over the marker.
-    var highlightedIcon = makeMarkerIcon('74ee0f');
+    highlightedIcon = makeMarkerIcon('74ee0f');
 
     largeInfowindow = new google.maps.InfoWindow();
     // The following group uses the location array to create an array of markers on initialize.
@@ -190,13 +226,15 @@ function initMap() {
         // Get the position from the location array.
         var position = nammaLocations[i].location;
         var title = nammaLocations[i].title;
+        var venueid = nammaLocations[i].venueid;
         // Create a marker per location, and put into markers array.
         var marker = new google.maps.Marker({
             position: position,
             title: title,
             animation: google.maps.Animation.DROP,
             icon: defaultIcon,
-            id: i
+            id: i,
+            venueid: venueid
         });
         // Push the marker to our array of markers.
         markers.push(marker);
@@ -231,29 +269,28 @@ var ViewModel = function () {
         nammaLocations.forEach(function (locItem) {
             if (locItem.title.toLowerCase().indexOf(self.filterText().toLowerCase()) != -1) {
                 self.filterLocations.push(new MetroLocation(locItem));
-                // console.log("Entering showmarker - lat,lng : " + locItem.location.lat + "," + locItem.location.lng);
                 showMarker(locItem.title);
             }
         });
+        // map.setCenter(new google.maps.LatLng(12.958457196981318,77.59314702896103));
+        // map.setZoom(13);
     };
     this.filterText.subscribe(function () {
         self.doFilter();
     });
     self.googlemap = map;
 
-    this.onClick = function ($index, data, event) {
+    this.onClick = function ($index, filterText, data, event) {
         var indexTouse = $index();
-        var metLoc = (ko.observable(self.filterLocations()[indexTouse]));
-        
-        //need to pass the marker, passign MetroLocation object wrongly
-        for (var i = 0; i < markers.length; i++) {            
-            if ((markers[i].title.toLowerCase().indexOf(metLoc.title().toLowerCase()) !== -1)) {            
-                populateInfoWindow(markers[i], largeInfowindow);
-            }        
-        }
-        
+        for (var i = 0; i < markers.length; i++) {
+            if ((markers[i].title.toLowerCase().indexOf(filterText().toLowerCase()) !== -1)) {
+                var marker = markers[i];
+                populateInfoWindow(marker, largeInfowindow);
+            }
+        };
     };
-};
+}
+
 
 function loadMap() {
     initMap();
