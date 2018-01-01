@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
     <title>My Neighborhood</title>
 </head>
+
 <body>
     <div class="wrapper ">
         <nav id="sidebar">
@@ -16,7 +18,7 @@
                 <ul class="list-unstyled components ">
                     <li>
                         <div class="searchFilter">
-                            <input id="search-within-text" type="text" placeholder="Filter stations" data-bind="textInput: filterText">                            
+                            <input id="search-within-text" type="text" placeholder="Filter stations" data-bind="textInput: filterText">
                         </div>
                     </li>
                     <li class="LocList">
@@ -28,6 +30,7 @@
                         </ul>
                     </li>
                 </ul>
+            </div>
         </nav>
         <div id="content">
             <nav class="navbar navbar-default">
@@ -39,28 +42,28 @@
             </nav>
             <div id="map"></div>
         </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
-
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar, #content').toggleClass('active');
-                    $('.collapse.in').toggleClass('in');
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js" onerror="alert('error loading JQuery');"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" onerror="alert('error loading bootstrap');"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js" onerror="alert('error loading cloudflare');"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
             });
-        </script>
-        <script src="js/lib/knockout-3.4.2.js"></script>
-        <script src="js/lib/underscore-min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyD62utTUhJBcOXsudmrD41EH3O_geuEGyg&v=3&callback=loadMap"
-            async defer></script>
-        <script src="js/app.js"></script>
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+    <script src="js/lib/knockout-3.4.2.js" onerror="alert('error loading knockoutJs');"></script>
+    <script src="js/lib/underscore-min.js" onerror="alert('error loading underscoreJs');"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyD62utTUhJBcOXsudmrD41EH3O_geuEGyg&v=3&callback=loadMap"
+        async defer></script>
+    <script src="js/app.js" onerror="alert('error loading app.js');"></script>
 
 </body>
 

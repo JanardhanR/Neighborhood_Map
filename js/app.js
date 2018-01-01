@@ -202,24 +202,29 @@ function populateInfoWindow(marker, infowindow) {
     //show loading till we get a response from foursqare..
     infowindow.setContent('<div>' + "Loading photo from foursquare.." + '</div>');
     //now try get the photo for the location..
-    $.getJSON(API_ENDPOINT
+    var jqxhr = $.getJSON(API_ENDPOINT
         .replace('VENUE_ID', marker.venueid)
         .replace('CLIENT_ID', CLIENT_ID)
-        .replace('CLIENT_SECRET', CLIENT_SECRET)
-        , function (result, status) {
-            //handle errors.  Instead of showing actual error, tell user that photo is not available.. 
-            if (status !== 'success') {
-                infowindow.setContent('<div>' + 'Location photo not available' + '</div>');
-                return;
-            }
+        .replace('CLIENT_SECRET', CLIENT_SECRET));
 
-            var url_Photo = result.response.photos.items[0].prefix + '200x200' +
-                result.response.photos.items[0].suffix;
-            infowindow.setContent('<div>'
-                + '<div>' + 'photo from foursquare.com' + '</div>'
-                + '<img src=' + url_Photo + '></img>' + '</div>');
+    //show the infowindow if we got the result..
+    jqxhr.done(function (result, status) {
+        if (status !== 'success') {
+            alert("Failed to get data from Foursquare.com ");
+            return;
+        }
+        var url_Photo = result.response.photos.items[0].prefix + '200x200' +
+            result.response.photos.items[0].suffix;
+        infowindow.setContent('<div>'
+            + '<div>' + 'photo from foursquare.com' + '</div>'
+            + '<img src=' + url_Photo + '></img>' + '</div>');
+    });
 
-        });
+    //show an alert if failed to get location photo.
+    jqxhr.fail(function () {
+        alert("Failed to get location photo from Foursquare.com ");
+    });
+    //show the info window
     infowindow.open(map, marker);
 
     //set animiation on the marker to bounce
@@ -227,8 +232,7 @@ function populateInfoWindow(marker, infowindow) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
     _.delay(function () {
         marker.setAnimation(google.maps.Animation.DROP);
-    },
-        1500);
+    }, 1500);
 }
 
 /**
