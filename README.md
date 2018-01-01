@@ -13,7 +13,7 @@ Udacity FSND.
    4. Minimum styling has been done as it is not the focus of this project. 
 
 ## How to open/run the project
-   1. Download the source from Github link[here](https://github.com/JanardhanR/Neighborhood_Map)   
+   1. Download the source from Github link [here](https://github.com/JanardhanR/Neighborhood_Map)   
        
    2. Unzip and open Neighborhood.html to launch the map
     
