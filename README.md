@@ -10,9 +10,9 @@ Udacity FSND.
    
    2. APIs from FourSquare.com are used to fetch the  photos for the respective locations shown in the map.
 
-   2. Some of the functions used were done as part of excercises in earlier courses and have been reused in the project.
+   3. Sidebar is built using notes from https://bootstrapious.com/p/bootstrap-sidebar, with additional modifications as required.
    
-   4. Minimum styling has been done as it is not the focus of this project. 
+   4. Some of the functions used were done as part of excercises in earlier courses and are from examples explained in                           https://developers.google.com/maps/documentation/javascript/.
    
    5. Has been tested for mobile/desktop.
 
