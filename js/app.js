@@ -332,7 +332,7 @@ var ViewModel = function () {
                 populateInfoWindow(marker, largeInfowindow);
             }
         };
-    };    
+    };
 }
 
 /**
