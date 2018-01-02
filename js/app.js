@@ -232,7 +232,7 @@ function populateInfoWindow(marker, infowindow) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
     _.delay(function () {
         marker.setAnimation(google.maps.Animation.DROP);
-    }, 1500);
+    }, 1400);
 }
 
 /**
@@ -305,7 +305,7 @@ var ViewModel = function () {
     this.filterText = ko.observable();
 
     //filter function that shows the markers based on the filter
-    this.doFilter = function () {
+    this.doFilter = function ()  {
         self.filterLocations.removeAll();
         hideMarkers();
         nammaLocations.forEach(function (locItem) {
@@ -332,8 +332,32 @@ var ViewModel = function () {
                 populateInfoWindow(marker, largeInfowindow);
             }
         };
-    };
+    };    
 }
+
+/**
+* @description Sidebar location click handler that shows infowindow on click
+* @param {String} title
+* @returns {None}
+*/
+onLocClick = (title) => {
+    console.log("called fcuker : " + title());
+    for (var i = 0; i < markers.length; i++) {
+        if ((markers[i].title.toLowerCase().indexOf(title().toLowerCase()) !== -1)) {
+            var marker = markers[i];
+            populateInfoWindow(marker, largeInfowindow);
+        }
+    };
+};
+
+/**
+* @description Error callback for GMap API request
+* @param {None}
+* @returns {None}
+*/
+mapError = () => {
+    alert("Error loading googleapis");
+};
 
 /**
 * @description main function
